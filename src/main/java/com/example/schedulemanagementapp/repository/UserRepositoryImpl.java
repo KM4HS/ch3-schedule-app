@@ -57,7 +57,7 @@ public class UserRepositoryImpl implements UserRepository{
 
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
 
-        return new UserResponseDto(key.longValue(), user.getRegDate(), user.getModDate(), user.getEmail(), user.getName());
+        return new UserResponseDto(key.longValue(), date, date, user.getEmail(), user.getName());
     }
 
     @Override

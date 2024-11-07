@@ -31,6 +31,8 @@ public class UserResponseDto {
 
     public UserResponseDto(User user) {
         this.id = user.getId();
+        this.regDate = user.getRegDate();
+        this.modDate = user.getModDate();
         this.email = user.getEmail();
         this.name = user.getName();
     }
