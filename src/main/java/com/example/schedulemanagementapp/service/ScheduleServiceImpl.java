@@ -1,5 +1,6 @@
 package com.example.schedulemanagementapp.service;
 
+import com.example.schedulemanagementapp.Paging;
 import com.example.schedulemanagementapp.dto.ScheduleResponseDto;
 import com.example.schedulemanagementapp.entity.Schedule;
 import com.example.schedulemanagementapp.repository.ScheduleRepository;
@@ -73,6 +74,20 @@ public class ScheduleServiceImpl implements ScheduleService {
     public List<ScheduleResponseDto> findAllScheduleByCond(LocalDate date, String user) {
 
         return scheduleRepository.findAllScheduleByCond(date, user);
+    }
+
+    /**
+     * 입력받은 값으로 페이징 객체 생성하고 repository 호출
+     * @param pageIndex 페이지 번호
+     * @param pageSize 페이지 크기
+     * @return 페이징 단위의 일정 리스트
+     */
+    @Override
+    public List<ScheduleResponseDto> findAllSchedulesInPage(int pageIndex, int pageSize) {
+
+        Paging paging = new Paging(pageIndex, pageSize);
+
+        return scheduleRepository.findAllSchedulesInPage(paging);
     }
 
     /**

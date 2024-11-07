@@ -1,5 +1,6 @@
 package com.example.schedulemanagementapp.repository;
 
+import com.example.schedulemanagementapp.Paging;
 import com.example.schedulemanagementapp.dto.ScheduleResponseDto;
 import com.example.schedulemanagementapp.entity.Schedule;
 
@@ -31,6 +32,9 @@ public interface ScheduleRepository {
 
     // 조건별 일정 전체 조회
     List<ScheduleResponseDto> findAllScheduleByCond(LocalDate date, String user);
+
+    // 페이징
+    List<ScheduleResponseDto> findAllSchedulesInPage(Paging paging);
 
     // 일정 수정
     int updateSchedule(Long id, String contents);

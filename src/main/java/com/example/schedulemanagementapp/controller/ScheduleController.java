@@ -79,6 +79,22 @@ public class ScheduleController {
     }
 
     /**
+     * 전체 schedule을 페이지 단위로 조회
+     *
+     * @param pageIndex 페이지 번호
+     * @param pageSize  페이지 크기
+     * @return 페이징 단위의 일정 리스트 반환
+     */
+    @GetMapping("/pages")
+    public ResponseEntity<List<ScheduleResponseDto>> findAllSchedulesInPage(
+            @RequestParam int pageIndex,
+            @RequestParam int pageSize
+    ) {
+
+        return new ResponseEntity<>(scheduleService.findAllSchedulesInPage(pageIndex, pageSize), HttpStatus.OK);
+    }
+
+    /**
      * 일정 수정
      *
      * @param id  일정 식별자

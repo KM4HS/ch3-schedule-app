@@ -1,5 +1,6 @@
 package com.example.schedulemanagementapp.repository;
 
+import com.example.schedulemanagementapp.Paging;
 import com.example.schedulemanagementapp.dto.ScheduleResponseDto;
 import com.example.schedulemanagementapp.entity.Schedule;
 import org.springframework.http.HttpStatus;
@@ -143,6 +144,18 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         System.out.println(sql);
 
         return jdbcTemplate.query(sql.toString(), rowMapperToDto());
+    }
+
+    /**
+     * LIMIT을 사용해 페이징 객체의 값만큼 db에서 데이터 조회
+     *
+     * @param paging 페이지 시작 행 번호, 페이지 크기가 있는 객체
+     * @return 페이징 단위의 데이터 리스트 반환
+     */
+    @Override
+    public List<ScheduleResponseDto> findAllSchedulesInPage(Paging paging) {
+
+        return jdbcTemplate.query("SELECT s.*, u.name FROM schedule s JOIN user u ON s.fk_userid=u.id ORDER BY s.mod_date DESC LIMIT ?, ?", rowMapperToDto(), paging.getStartRow(), paging.getPageSize());
     }
 
     /**

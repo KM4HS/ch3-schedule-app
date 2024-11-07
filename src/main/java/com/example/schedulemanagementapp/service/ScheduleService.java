@@ -29,6 +29,9 @@ public interface ScheduleService {
     // 조건별 일정 전체 조회
     List<ScheduleResponseDto> findAllScheduleByCond(LocalDate date, String user);
 
+    // 페이징
+    List<ScheduleResponseDto> findAllSchedulesInPage(int pageIndex, int pageSize);
+
     // 일정 수정
     ScheduleResponseDto updateSchedule(Long id, String password, String contents);
 
