@@ -25,12 +25,12 @@ public class ScheduleResponseDto {
     private final Long id;
     private final LocalDate date;
     private final String contents;
-    private final String writer;
+    private final String user;
 
     public ScheduleResponseDto(Schedule schedule) {
         this.id = schedule.getId();
         this.date = schedule.getDate();
         this.contents = schedule.getContents();
-        this.writer = schedule.getWriter();
+        this.user = schedule.getUser();
     }
 }

@@ -26,11 +26,11 @@ public class Schedule {
     private String password;
     private LocalDate date;
     private String contents;
-    private String writer;
+    private String user;
 
-    public Schedule(String password, String contents, String writer) {
+    public Schedule(String password, String contents, String user) {
         this.password = password;
         this.contents = contents;
-        this.writer = writer;
+        this.user = user;
     }
 }

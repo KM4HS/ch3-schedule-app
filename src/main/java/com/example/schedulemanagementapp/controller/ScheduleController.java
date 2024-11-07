@@ -45,7 +45,7 @@ public class ScheduleController {
             @RequestBody ScheduleRequestDto dto
     ) {
 
-        return new ResponseEntity<>(scheduleService.createSchedule(dto.getPassword(), dto.getContents(), dto.getWriter()), HttpStatus.CREATED);
+        return new ResponseEntity<>(scheduleService.createSchedule(dto.getPassword(), dto.getContents(), dto.getUser()), HttpStatus.CREATED);
     }
 
     /**
@@ -66,17 +66,16 @@ public class ScheduleController {
      * 조건별 다건 조회
      *
      * @param date   날짜 조건
-     * @param writer 작성자 조건
+     * @param user 작성자 조건
      * @return 조건에 맞는 일정 검색 결과를 배열 형태로 반환. 조건은 필수가 아님.
      */
     @GetMapping
     public ResponseEntity<List<ScheduleResponseDto>> findAllSchedulesByCond(
             @RequestParam(required = false) LocalDate date,
-            @RequestParam(required = false) String writer
+            @RequestParam(required = false) String user
     ) {
-        System.out.println(date + " " + writer);
 
-        return new ResponseEntity<>(scheduleService.findAllScheduleByCond(date, writer), HttpStatus.OK);
+        return new ResponseEntity<>(scheduleService.findAllScheduleByCond(date, user), HttpStatus.OK);
     }
 
     /**
@@ -92,7 +91,7 @@ public class ScheduleController {
             @RequestBody ScheduleRequestDto dto
     ) {
 
-        return new ResponseEntity<>(scheduleService.updateSchedule(id, dto.getPassword(), dto.getContents(), dto.getWriter()), HttpStatus.OK);
+        return new ResponseEntity<>(scheduleService.updateSchedule(id, dto.getPassword(), dto.getContents(), dto.getUser()), HttpStatus.OK);
     }
 
     /**

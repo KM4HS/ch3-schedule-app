@@ -39,13 +39,13 @@ public class ScheduleServiceImpl implements ScheduleService {
      *
      * @param password 비밀번호
      * @param contents 일정 내용
-     * @param writer   작성자
+     * @param user   작성자
      * @return repository를 거쳐 완성된 schedule을 dto로 반환
      */
     @Override
-    public ScheduleResponseDto createSchedule(String password, String contents, String writer) {
+    public ScheduleResponseDto createSchedule(String password, String contents, String user) {
 
-        Schedule schedule = new Schedule(password, contents, writer);
+        Schedule schedule = new Schedule(password, contents, user);
 
         return scheduleRepository.createSchedule(schedule);
     }
@@ -66,13 +66,13 @@ public class ScheduleServiceImpl implements ScheduleService {
      * 조건별 일정 다건 조회
      *
      * @param date   날짜 조건
-     * @param writer 작성자 조건
+     * @param user 작성자 조건
      * @return 찾은 일정 배열 반환
      */
     @Override
-    public List<ScheduleResponseDto> findAllScheduleByCond(LocalDate date, String writer) {
+    public List<ScheduleResponseDto> findAllScheduleByCond(LocalDate date, String user) {
 
-        return scheduleRepository.findAllScheduleByCond(date, writer);
+        return scheduleRepository.findAllScheduleByCond(date, user);
     }
 
     /**
@@ -81,15 +81,15 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @param id       일정 식별자
      * @param password 비밀번호
      * @param contents 내용
-     * @param writer   작성자
+     * @param user   작성자
      * @return 수정된 일정을 반환
      */
     @Transactional
     @Override
-    public ScheduleResponseDto updateSchedule(Long id, String password, String contents, String writer) {
+    public ScheduleResponseDto updateSchedule(Long id, String password, String contents, String user) {
 
-        if (contents == null || writer == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Contents and writer are required");
+        if (contents == null || user == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Contents and user are required");
         }
 
         Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
@@ -98,7 +98,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong password");
         }
 
-        if (scheduleRepository.updateSchedule(id, contents, writer) == 0) {
+        if (scheduleRepository.updateSchedule(id, contents, user) == 0) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
         }
 

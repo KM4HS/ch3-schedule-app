@@ -58,12 +58,12 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("password", schedule.getPassword());
         parameters.put("contents", schedule.getContents());
-        parameters.put("writer", schedule.getWriter());
+        parameters.put("user", schedule.getUser());
         parameters.put("mod_date", modDate);
 
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
 
-        return new ScheduleResponseDto(key.longValue(), modDate, schedule.getContents(), schedule.getWriter());
+        return new ScheduleResponseDto(key.longValue(), modDate, schedule.getContents(), schedule.getUser());
     }
 
     /**
@@ -86,17 +86,17 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
      * 조건별 일정 다건 조회. 조건에 따라 sql문 생성 후 찾은 값을 dto 배열로 저장.
      *
      * @param date   날짜 조건
-     * @param writer 작성자 조건
+     * @param user 작성자 조건
      * @return 조건에 부합하는 일정 응답 dto 배열
      */
     @Override
-    public List<ScheduleResponseDto> findAllScheduleByCond(LocalDate date, String writer) {
+    public List<ScheduleResponseDto> findAllScheduleByCond(LocalDate date, String user) {
 
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT * FROM schedule");
 
         // 조건이 있을 시 WHERE 절 추가
-        if (date != null || writer != null) {
+        if (date != null || user != null) {
             sql.append(" WHERE");
         }
 
@@ -107,13 +107,13 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
             andFlag = true;
         }
 
-        // writer 조건이 있는 경우
-        if (writer != null) {
+        // user 조건이 있는 경우
+        if (user != null) {
             // 앞서 date 조건이 있으면 AND 추가
             if (andFlag) {
                 sql.append(" AND");
             }
-            sql.append(" writer = ").append("\"").append(writer).append("\"");
+            sql.append(" user = ").append("\"").append(user).append("\"");
         }
         // 수정일 기준으로 내림차순 정렬
         sql.append(" ORDER BY mod_date DESC");
@@ -128,14 +128,14 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
      *
      * @param id       일정 식별자
      * @param contents 내용
-     * @param writer   작성자
+     * @param user   작성자
      * @return 수정된 일정 개수를 반환
      */
     @Override
-    public int updateSchedule(Long id, String contents, String writer) {
+    public int updateSchedule(Long id, String contents, String user) {
 
         LocalDate modDate = LocalDate.now();
-        return jdbcTemplate.update("UPDATE schedule SET contents = ?, writer = ?, mod_date = ? WHERE id = ?", contents, writer, modDate, id);
+        return jdbcTemplate.update("UPDATE schedule SET contents = ?, user = ?, mod_date = ? WHERE id = ?", contents, user, modDate, id);
     }
 
     /**
@@ -161,7 +161,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
                         rs.getLong("id"),
                         rs.getDate("mod_date").toLocalDate(),
                         rs.getString("contents"),
-                        rs.getString("writer")
+                        rs.getString("user")
                 );
             }
         };
@@ -181,7 +181,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
                         rs.getString("password"),
                         rs.getDate("mod_date").toLocalDate(),
                         rs.getString("contents"),
-                        rs.getString("writer")
+                        rs.getString("user")
                 );
             }
         };

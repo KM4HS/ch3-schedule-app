@@ -27,10 +27,10 @@ public interface ScheduleRepository {
     Schedule findScheduleByIdOrElseThrow(Long id);
 
     // 조건별 일정 전체 조회
-    List<ScheduleResponseDto> findAllScheduleByCond(LocalDate date, String writer);
+    List<ScheduleResponseDto> findAllScheduleByCond(LocalDate date, String user);
 
     // 일정 수정
-    int updateSchedule(Long id, String contents, String writer);
+    int updateSchedule(Long id, String contents, String user);
 
     // 일정 삭제
     void deleteSchedule(Long id);
