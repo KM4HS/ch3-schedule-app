@@ -24,7 +24,7 @@ import java.util.Map;
  * <li>fileName       : ScheduleRepositoryImpl
  * <li>author         : daca0
  * <li>date           : 24. 11. 7.
- * <li>description    :
+ * <li>description    : {@link ScheduleRepository} 구현체
  * </ul>
  * ===========================================================
  * <p>
@@ -44,13 +44,15 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     /**
      * 일정을 db에 기록. Auto_increment로 생성된 key값, 현재 시간과 매개변수로 받은 데이터를 schedule 엔티티에 저장.
      *
-     * @param schedule
-     * @param userId
+     * @param schedule 값이 일부만 입력된 Schedule 객체
+     * @param userId   유저 식별자
      * @return 생성한 일정을 담은 응답 dto
      */
     @Override
     public ScheduleResponseDto createSchedule(Schedule schedule, Long userId) {
 
+        // 유저의 이름을 찾는다.
+        // 만약 등록되지 않은 유저 id일 경우 throw
         String userName = findNameByUserIdOrElseThrow(userId);
         System.out.println(userName);
 
@@ -72,6 +74,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 
     /**
      * schedule 테이블의 외래키를 이용해 user 테이블에서 이름을 찾아온다.
+     *
      * @param id schedule 테이블 외래키(->user)
      * @return 찾은 이름. 없을시 404
      */
@@ -80,7 +83,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         List<String> result = jdbcTemplate.query("SELECT name FROM user WHERE id = ?", rowMapperToString(), id);
         return result.stream()
                 .findAny()
-                .orElseThrow(()->
+                .orElseThrow(() ->
                         new ResponseStatusException(HttpStatus.NOT_FOUND)
                 );
     }
@@ -104,7 +107,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     /**
      * 조건별 일정 다건 조회. 조건에 따라 sql문 생성 후 찾은 값을 dto 배열로 저장.
      *
-     * @param date   날짜 조건
+     * @param date 날짜 조건
      * @param user 작성자 조건
      * @return 조건에 부합하는 일정 응답 dto 배열
      */
@@ -147,14 +150,13 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
      *
      * @param id       일정 식별자
      * @param contents 내용
-     * @param user   작성자
      * @return 수정된 일정 개수를 반환
      */
     @Override
-    public int updateSchedule(Long id, String contents, String user) {
+    public int updateSchedule(Long id, String contents) {
 
         LocalDate modDate = LocalDate.now();
-        return jdbcTemplate.update("UPDATE schedule SET contents = ?, user = ?, mod_date = ? WHERE id = ?", contents, user, modDate, id);
+        return jdbcTemplate.update("UPDATE schedule SET contents = ?, mod_date = ? WHERE id = ?", contents, modDate, id);
     }
 
     /**
@@ -206,6 +208,11 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         };
     }
 
+    /**
+     * db에서 이름을 가져와 String으로 매핑
+     *
+     * @return 이름 String
+     */
     private RowMapper<String> rowMapperToString() {
         return new RowMapper<String>() {
             @Override

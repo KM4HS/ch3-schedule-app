@@ -30,7 +30,7 @@ public interface ScheduleService {
     List<ScheduleResponseDto> findAllScheduleByCond(LocalDate date, String user);
 
     // 일정 수정
-    ScheduleResponseDto updateSchedule(Long id, String password, String contents, String user);
+    ScheduleResponseDto updateSchedule(Long id, String password, String contents);
 
     // 일정 삭제
     void deleteSchedule(Long id, String password);

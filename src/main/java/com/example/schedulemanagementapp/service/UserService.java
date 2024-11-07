@@ -1,6 +1,5 @@
 package com.example.schedulemanagementapp.service;
 
-import com.example.schedulemanagementapp.dto.UserRequestDto;
 import com.example.schedulemanagementapp.dto.UserResponseDto;
 
 /**
@@ -9,7 +8,7 @@ import com.example.schedulemanagementapp.dto.UserResponseDto;
  * <li>fileName       : UserService
  * <li>author         : daca0
  * <li>date           : 24. 11. 7.
- * <li>description    :
+ * <li>description    : 유저 service 레이어 인터페이스
  * </ul>
  * ===========================================================
  * <p>
@@ -25,6 +24,6 @@ public interface UserService {
     UserResponseDto findUserByIdOrElseThrow(Long id);
 
     // 유저 정보 수정
-    UserResponseDto updateuser(Long id, String email, String name);
+    UserResponseDto updateUser(Long id, String name);
 
 }

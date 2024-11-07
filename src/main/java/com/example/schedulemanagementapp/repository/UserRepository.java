@@ -9,7 +9,7 @@ import com.example.schedulemanagementapp.entity.User;
  * <li>fileName       : UserRepository
  * <li>author         : daca0
  * <li>date           : 24. 11. 7.
- * <li>description    :
+ * <li>description    : 유저 repository 레이어 인터페이스
  * </ul>
  * ===========================================================
  * <p>
@@ -25,5 +25,5 @@ public interface UserRepository {
     User findUserByIdOrElseThrow(Long id);
 
     // 유저 정보 수정
-    int updateUser(Long id, String email, String name);
+    int updateUser(Long id, String name);
 }

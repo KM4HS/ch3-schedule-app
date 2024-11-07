@@ -11,7 +11,7 @@ import java.time.LocalDate;
  * <li>fileName       : User
  * <li>author         : daca0
  * <li>date           : 24. 11. 7.
- * <li>description    :
+ * <li>description    : user 테이블과 연동되는 엔티티
  * </ul>
  * ===========================================================
  * <p>
@@ -28,7 +28,7 @@ public class User {
     private LocalDate regDate;
     private LocalDate modDate;
 
-    public User (String email, String name) {
+    public User(String email, String name) {
         this.email = email;
         this.name = name;
     }

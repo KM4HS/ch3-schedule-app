@@ -24,7 +24,7 @@ import java.util.Map;
  * <li>fileName       : UserRepositoryImpl
  * <li>author         : daca0
  * <li>date           : 24. 11. 7.
- * <li>description    :
+ * <li>description    : {@link UserRepository} 구현체
  * </ul>
  * ===========================================================
  * <p>
@@ -33,7 +33,7 @@ import java.util.Map;
  */
 
 @Repository
-public class UserRepositoryImpl implements UserRepository{
+public class UserRepositoryImpl implements UserRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -41,13 +41,18 @@ public class UserRepositoryImpl implements UserRepository{
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    /**
+     * 신규 유저 등록
+     * @param user 유저 정보 일부가 담긴 User 객체
+     * @return 등록된 유저 정보
+     */
     @Override
     public UserResponseDto createUser(User user) {
 
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName("user").usingGeneratedKeyColumns("id");
 
-        LocalDate date= LocalDate.now();
+        LocalDate date = LocalDate.now();
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("email", user.getEmail());
@@ -60,6 +65,11 @@ public class UserRepositoryImpl implements UserRepository{
         return new UserResponseDto(key.longValue(), date, date, user.getEmail(), user.getName());
     }
 
+    /**
+     * 유저 조회
+     * @param id 유저 식별자
+     * @return 조회된 유저 정보
+     */
     @Override
     public User findUserByIdOrElseThrow(Long id) {
 
@@ -72,12 +82,23 @@ public class UserRepositoryImpl implements UserRepository{
                 );
     }
 
+    /**
+     * 유저 이름 수정
+     * @param id 유저 식별자
+     * @param name 변경할 이름
+     * @return 변경된 유저 정보
+     */
     @Override
-    public int updateUser(Long id, String email, String name) {
+    public int updateUser(Long id, String name) {
 
-        return jdbcTemplate.update("UPDATE user SET email = ?, name = ? WHERE id = ?", email, name, id);
+        LocalDate modDate = LocalDate.now();
+        return jdbcTemplate.update("UPDATE user SET name = ?, mod_date = ? WHERE id = ?", name, modDate, id);
     }
 
+    /**
+     * db의 값을 User 형태로 매핑
+     * @return 매핑된 user
+     */
     private RowMapper<User> rowMapperToUser() {
         return new RowMapper<User>() {
             @Override

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
  * <li>fileName       : UserController
  * <li>author         : daca0
  * <li>date           : 24. 11. 7.
- * <li>description    :
+ * <li>description    : User의 등록, 수정, 조회의 실행을 관리하는 Controller 클래스
  * </ul>
  * ===========================================================
  * <p>
@@ -31,7 +31,11 @@ public class UserController {
         this.userService = userService;
     }
 
-    // 유저 등록
+    /**
+     *유저 등록
+     * @param dto 유저 등록을 위한 요청값 dto
+     * @return 등록된 유저 정보
+     */
     @PostMapping
     public ResponseEntity<UserResponseDto> createUser(
             @RequestBody UserRequestDto dto
@@ -40,7 +44,11 @@ public class UserController {
         return new ResponseEntity<>(userService.createUser(dto.getEmail(), dto.getName()), HttpStatus.CREATED);
     }
 
-    // 유저 단일 조회
+    /**
+     * 유저 조회
+     * @param id 유저 식별자
+     * @return 조회된 유저 정보
+     */
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> findUserByIdOrElseThrow(
             @PathVariable Long id
@@ -49,14 +57,19 @@ public class UserController {
         return new ResponseEntity<>(userService.findUserByIdOrElseThrow(id), HttpStatus.OK);
     }
 
-    // 유저 정보 수정
+    /**
+     * 유저 정보 수정
+     * @param id 유저 식별자
+     * @param dto 요청된 수정사항을 담은 dto
+     * @return 수정된 유저 정보
+     */
     @PatchMapping("/{id}")
     public ResponseEntity<UserResponseDto> updateUser(
             @PathVariable Long id,
             @RequestBody UserRequestDto dto
     ) {
 
-        return new ResponseEntity<>(userService.updateuser(id, dto.getEmail(), dto.getName()), HttpStatus.OK);
+        return new ResponseEntity<>(userService.updateUser(id, dto.getName()), HttpStatus.OK);
     }
 
 }

@@ -65,7 +65,7 @@ public class ScheduleController {
     /**
      * 조건별 다건 조회
      *
-     * @param date   날짜 조건
+     * @param date 날짜 조건
      * @param user 작성자 조건
      * @return 조건에 맞는 일정 검색 결과를 배열 형태로 반환. 조건은 필수가 아님.
      */
@@ -91,7 +91,7 @@ public class ScheduleController {
             @RequestBody ScheduleRequestDto dto
     ) {
 
-        return new ResponseEntity<>(scheduleService.updateSchedule(id, dto.getPassword(), dto.getContents(), dto.getUserName()), HttpStatus.OK);
+        return new ResponseEntity<>(scheduleService.updateSchedule(id, dto.getPassword(), dto.getContents()), HttpStatus.OK);
     }
 
     /**

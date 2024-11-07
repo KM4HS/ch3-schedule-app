@@ -33,7 +33,7 @@ public interface ScheduleRepository {
     List<ScheduleResponseDto> findAllScheduleByCond(LocalDate date, String user);
 
     // 일정 수정
-    int updateSchedule(Long id, String contents, String user);
+    int updateSchedule(Long id, String contents);
 
     // 일정 삭제
     void deleteSchedule(Long id);

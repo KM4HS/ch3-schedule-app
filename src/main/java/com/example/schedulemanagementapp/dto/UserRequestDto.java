@@ -8,7 +8,7 @@ import lombok.Getter;
  * <li>fileName       : UserRequestDto
  * <li>author         : daca0
  * <li>date           : 24. 11. 7.
- * <li>description    :
+ * <li>description    : 사용자 정보 요청 dto
  * </ul>
  * ===========================================================
  * <p>

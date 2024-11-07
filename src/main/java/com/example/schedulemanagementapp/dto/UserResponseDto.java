@@ -12,7 +12,7 @@ import java.time.LocalDate;
  * <li>fileName       : UserResponseDto
  * <li>author         : daca0
  * <li>date           : 24. 11. 7.
- * <li>description    :
+ * <li>description    : 사용자 정보 응답 dto
  * </ul>
  * ===========================================================
  * <p>

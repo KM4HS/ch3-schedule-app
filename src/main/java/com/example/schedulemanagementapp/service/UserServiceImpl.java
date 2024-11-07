@@ -14,7 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
  * <li>fileName       : UserServiceImpl
  * <li>author         : daca0
  * <li>date           : 24. 11. 7.
- * <li>description    :
+ * <li>description    : {@link UserService} 구현체
  * </ul>
  * ===========================================================
  * <p>
@@ -23,7 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
  */
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
@@ -31,28 +31,47 @@ public class UserServiceImpl implements UserService{
         this.userRepository = userRepository;
     }
 
+    /**
+     * 유저 등록
+     * @param email 등록할 유저 email
+     * @param name 등록할 유저명
+     * @return 등록된 유저 정보 dto
+     */
     @Override
     public UserResponseDto createUser(String email, String name) {
 
         return userRepository.createUser(new User(email, name));
     }
 
+    /**
+     * 유저 조회
+     * @param id 유저 식별자
+     * @return 조회된 유저 정보
+     */
     @Override
     public UserResponseDto findUserByIdOrElseThrow(Long id) {
 
         return new UserResponseDto(userRepository.findUserByIdOrElseThrow(id));
     }
 
+    /**
+     * 유저 이름 수정
+     * @param id 유저 식별자
+     * @param name 수정할 유저명
+     * @return 수정된 유저 정보
+     */
     @Transactional
     @Override
-    public UserResponseDto updateuser(Long id, String email, String name) {
+    public UserResponseDto updateUser(Long id, String name) {
 
-        if(email == null || name == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email and name are required");
+        // 이름이 null인 경우 400
+        if (name == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is required");
         }
 
-        if(userRepository.updateUser(id, email, name) == 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = "+id);
+        // 수정된 user가 없을 경우 404
+        if (userRepository.updateUser(id, name) == 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
         }
 
         return new UserResponseDto(userRepository.findUserByIdOrElseThrow(id));
