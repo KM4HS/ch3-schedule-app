@@ -11,7 +11,7 @@ import java.util.List;
  * <li>fileName       : ScheduleService
  * <li>author         : daca0
  * <li>date           : 24. 11. 7.
- * <li>description    :
+ * <li>description    : 일정 서비스 레이어 인터페이스
  * </ul>
  * ===========================================================
  * <p>

@@ -12,7 +12,7 @@ import java.time.LocalDate;
  * <li>fileName       : ScheduleResponseDto
  * <li>author         : daca0
  * <li>date           : 24. 11. 5.
- * <li>description    :
+ * <li>description    : 일정 응답 dto
  * </ul>
  * ===========================================================
  * <p>

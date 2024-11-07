@@ -1,6 +1,5 @@
 package com.example.schedulemanagementapp.entity;
 
-import com.example.schedulemanagementapp.dto.ScheduleRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,7 +11,7 @@ import java.time.LocalDate;
  * <li>fileName       : Schedule
  * <li>author         : daca0
  * <li>date           : 24. 11. 5.
- * <li>description    :
+ * <li>description    : schedule db와 연동되는 엔티티
  * </ul>
  * ===========================================================
  * <p>
@@ -29,7 +28,7 @@ public class Schedule {
     private String contents;
     private String writer;
 
-    public Schedule (String password, String contents, String writer) {
+    public Schedule(String password, String contents, String writer) {
         this.password = password;
         this.contents = contents;
         this.writer = writer;

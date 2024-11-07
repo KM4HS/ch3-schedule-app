@@ -16,7 +16,7 @@ import java.util.*;
  * <li>fileName       : ScheduleController
  * <li>author         : daca0
  * <li>date           : 24. 11. 5.
- * <li>description    :
+ * <li>description    : 일정 관련 실행을 관리하는 controller 클래스
  * </ul>
  * ===========================================================
  * <p>
@@ -34,7 +34,12 @@ public class ScheduleController {
         this.scheduleService = scheduleService;
     }
 
-    // 할일 생성
+    /**
+     * 일정 생성
+     *
+     * @param dto 일정 요청값을 받음
+     * @return 생성된 일정을 반환
+     */
     @PostMapping
     public ResponseEntity<ScheduleResponseDto> createSchedule(
             @RequestBody ScheduleRequestDto dto
@@ -43,7 +48,12 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleService.createSchedule(dto.getPassword(), dto.getContents(), dto.getWriter()), HttpStatus.CREATED);
     }
 
-    // 단일 조회
+    /**
+     * 일정 단건 조회
+     *
+     * @param id 일정 식별자
+     * @return 식별한 일정을 반환
+     */
     @GetMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> findScheduleById(
             @PathVariable Long id
@@ -52,18 +62,30 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleService.findScheduleByIdOrElseThrow(id), HttpStatus.OK);
     }
 
-    // 다중 조회 (조건있음)
+    /**
+     * 조건별 다건 조회
+     *
+     * @param date   날짜 조건
+     * @param writer 작성자 조건
+     * @return 조건에 맞는 일정 검색 결과를 배열 형태로 반환. 조건은 필수가 아님.
+     */
     @GetMapping
     public ResponseEntity<List<ScheduleResponseDto>> findAllSchedulesByCond(
             @RequestParam(required = false) LocalDate date,
             @RequestParam(required = false) String writer
     ) {
-        System.out.println(date +" "+ writer);
+        System.out.println(date + " " + writer);
 
         return new ResponseEntity<>(scheduleService.findAllScheduleByCond(date, writer), HttpStatus.OK);
     }
 
-    // 할일 수정
+    /**
+     * 일정 수정
+     *
+     * @param id  일정 식별자
+     * @param dto 일정 요청값
+     * @return 수정된 일정을 반환
+     */
     @PatchMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> updateSchedule(
             @PathVariable Long id,
@@ -73,7 +95,13 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleService.updateSchedule(id, dto.getPassword(), dto.getContents(), dto.getWriter()), HttpStatus.OK);
     }
 
-    // 단일 할일 삭제
+    /**
+     * 일정 삭제
+     *
+     * @param id  일정 식별자
+     * @param dto 비밀번호를 담은 일정 정보
+     * @return 삭제되었다는 메시지 반환
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteScheduleById(
             @PathVariable Long id,

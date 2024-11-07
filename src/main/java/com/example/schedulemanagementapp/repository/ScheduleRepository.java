@@ -12,7 +12,7 @@ import java.util.List;
  * <li>fileName       : ScheduleRepository
  * <li>author         : daca0
  * <li>date           : 24. 11. 7.
- * <li>description    :
+ * <li>description    : 일정 repository 레이어 인터페이스
  * </ul>
  * ===========================================================
  * <p>
@@ -21,18 +21,18 @@ import java.util.List;
  */
 public interface ScheduleRepository {
     // 일정 생성
-    ScheduleResponseDto createSchedule (Schedule schedule);
+    ScheduleResponseDto createSchedule(Schedule schedule);
 
     // 일정 단건 조회, 없을시 throw
-    Schedule findScheduleByIdOrElseThrow (Long id);
+    Schedule findScheduleByIdOrElseThrow(Long id);
 
     // 조건별 일정 전체 조회
-    List<ScheduleResponseDto> findAllScheduleByCond (LocalDate date, String writer);
+    List<ScheduleResponseDto> findAllScheduleByCond(LocalDate date, String writer);
 
     // 일정 수정
-    int updateSchedule (Long id, String contents, String writer);
+    int updateSchedule(Long id, String contents, String writer);
 
     // 일정 삭제
-    void deleteSchedule (Long id);
+    void deleteSchedule(Long id);
 
 }

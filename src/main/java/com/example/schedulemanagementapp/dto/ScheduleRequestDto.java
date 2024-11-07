@@ -8,7 +8,7 @@ import lombok.Getter;
  * <li>fileName       : ScheduleRequestDto
  * <li>author         : daca0
  * <li>date           : 24. 11. 5.
- * <li>description    :
+ * <li>description    : 일정 요청 dto
  * </ul>
  * ===========================================================
  * <p>

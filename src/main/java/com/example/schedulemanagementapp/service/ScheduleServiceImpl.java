@@ -17,7 +17,7 @@ import java.util.List;
  * <li>fileName       : ScheduleServiceImpl
  * <li>author         : daca0
  * <li>date           : 24. 11. 7.
- * <li>description    :
+ * <li>description    : 일정 서비스 레이어 구현 클래스
  * </ul>
  * ===========================================================
  * <p>
@@ -34,6 +34,14 @@ public class ScheduleServiceImpl implements ScheduleService {
         this.scheduleRepository = scheduleRepository;
     }
 
+    /**
+     * 일정 생성 서비스 단계. 요청값을 schedule에 대입
+     *
+     * @param password 비밀번호
+     * @param contents 일정 내용
+     * @param writer   작성자
+     * @return repository를 거쳐 완성된 schedule을 dto로 반환
+     */
     @Override
     public ScheduleResponseDto createSchedule(String password, String contents, String writer) {
 
@@ -42,44 +50,72 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleRepository.createSchedule(schedule);
     }
 
+    /**
+     * 일정 단건 조회
+     *
+     * @param id 일정 식별자
+     * @return repository에서 일정을 찾으면 반환
+     */
     @Override
     public ScheduleResponseDto findScheduleByIdOrElseThrow(Long id) {
 
         return new ScheduleResponseDto(scheduleRepository.findScheduleByIdOrElseThrow(id));
     }
 
+    /**
+     * 조건별 일정 다건 조회
+     *
+     * @param date   날짜 조건
+     * @param writer 작성자 조건
+     * @return 찾은 일정 배열 반환
+     */
     @Override
     public List<ScheduleResponseDto> findAllScheduleByCond(LocalDate date, String writer) {
 
         return scheduleRepository.findAllScheduleByCond(date, writer);
     }
 
+    /**
+     * 일정 수정. 내용 또는 작성자가 없을 경우, 비밀번호가 틀릴 경우 throw, 업데이트된 일정이 없을 경우 throw
+     *
+     * @param id       일정 식별자
+     * @param password 비밀번호
+     * @param contents 내용
+     * @param writer   작성자
+     * @return 수정된 일정을 반환
+     */
     @Transactional
     @Override
     public ScheduleResponseDto updateSchedule(Long id, String password, String contents, String writer) {
 
-        if(contents == null || writer == null) {
+        if (contents == null || writer == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Contents and writer are required");
         }
 
         Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
 
-        if(!schedule.getPassword().equals(password)) {
+        if (!schedule.getPassword().equals(password)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong password");
         }
 
-        if(scheduleRepository.updateSchedule(id, contents, writer) == 0) {
+        if (scheduleRepository.updateSchedule(id, contents, writer) == 0) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
         }
 
         return new ScheduleResponseDto(scheduleRepository.findScheduleByIdOrElseThrow(id));
     }
 
+    /**
+     * 일정 삭제. 비밀번호 틀릴 경우 throw
+     *
+     * @param id       일정 식별자
+     * @param password 비밀번호
+     */
     @Override
     public void deleteSchedule(Long id, String password) {
         Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
 
-        if(!schedule.getPassword().equals(password)) {
+        if (!schedule.getPassword().equals(password)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong password");
         }
 
