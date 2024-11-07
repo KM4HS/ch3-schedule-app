@@ -43,23 +43,23 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public ScheduleResponseDto findScheduleById(Long id) {
+    public ScheduleResponseDto findScheduleByIdOrElseThrow(Long id) {
 
         return new ScheduleResponseDto(scheduleRepository.findScheduleByIdOrElseThrow(id));
     }
 
     @Override
-    public List<ScheduleResponseDto> findAllScheduleByCondition(LocalDate date, String writer) {
+    public List<ScheduleResponseDto> findAllScheduleByCond(LocalDate date, String writer) {
 
         return scheduleRepository.findAllScheduleByCond(date, writer);
     }
 
     @Transactional
     @Override
-    public ScheduleResponseDto updateSchedule(Long id, String password, String contents) {
+    public ScheduleResponseDto updateSchedule(Long id, String password, String contents, String writer) {
 
-        if(contents.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Content is required");
+        if(contents == null || writer == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Contents and writer are required");
         }
 
         Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
@@ -68,11 +68,11 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong password");
         }
 
-        if(scheduleRepository.updateSchedule(id, contents) == 0) {
+        if(scheduleRepository.updateSchedule(id, contents, writer) == 0) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
         }
 
-        return new ScheduleResponseDto(schedule);
+        return new ScheduleResponseDto(scheduleRepository.findScheduleByIdOrElseThrow(id));
     }
 
     @Override

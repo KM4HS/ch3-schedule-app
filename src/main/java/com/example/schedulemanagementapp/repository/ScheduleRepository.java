@@ -20,10 +20,19 @@ import java.util.List;
  * </p>
  */
 public interface ScheduleRepository {
+    // 일정 생성
     ScheduleResponseDto createSchedule (Schedule schedule);
+
+    // 일정 단건 조회, 없을시 throw
     Schedule findScheduleByIdOrElseThrow (Long id);
+
+    // 조건별 일정 전체 조회
     List<ScheduleResponseDto> findAllScheduleByCond (LocalDate date, String writer);
-    int updateSchedule (Long id, String contents);
+
+    // 일정 수정
+    int updateSchedule (Long id, String contents, String writer);
+
+    // 일정 삭제
     void deleteSchedule (Long id);
 
 }

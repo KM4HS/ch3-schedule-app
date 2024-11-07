@@ -49,17 +49,18 @@ public class ScheduleController {
             @PathVariable Long id
     ) {
 
-        return new ResponseEntity<>(scheduleService.findScheduleById(id), HttpStatus.OK);
+        return new ResponseEntity<>(scheduleService.findScheduleByIdOrElseThrow(id), HttpStatus.OK);
     }
 
     // 다중 조회 (조건있음)
     @GetMapping
-    public ResponseEntity<List<ScheduleResponseDto>> findAllSchedulesByKeyword(
+    public ResponseEntity<List<ScheduleResponseDto>> findAllSchedulesByCond(
             @RequestParam(required = false) LocalDate date,
             @RequestParam(required = false) String writer
     ) {
+        System.out.println(date +" "+ writer);
 
-        return new ResponseEntity<>(scheduleService.findAllScheduleByCondition(date, writer), HttpStatus.OK);
+        return new ResponseEntity<>(scheduleService.findAllScheduleByCond(date, writer), HttpStatus.OK);
     }
 
     // 할일 수정
@@ -69,7 +70,7 @@ public class ScheduleController {
             @RequestBody ScheduleRequestDto dto
     ) {
 
-        return new ResponseEntity<>(scheduleService.updateSchedule(id, dto.getPassword(), dto.getContents()), HttpStatus.OK);
+        return new ResponseEntity<>(scheduleService.updateSchedule(id, dto.getPassword(), dto.getContents(), dto.getWriter()), HttpStatus.OK);
     }
 
     // 단일 할일 삭제

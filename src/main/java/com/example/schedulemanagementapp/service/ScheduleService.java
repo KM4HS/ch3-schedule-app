@@ -19,9 +19,19 @@ import java.util.List;
  * </p>
  */
 public interface ScheduleService {
-    ScheduleResponseDto createSchedule (String password, String contents, String writer);
-    ScheduleResponseDto findScheduleById (Long id);
-    List<ScheduleResponseDto> findAllScheduleByCondition (LocalDate date, String writer);
-    ScheduleResponseDto updateSchedule (Long id, String password, String contents);
-    void deleteSchedule (Long id, String password);
+
+    // 일정 생성
+    ScheduleResponseDto createSchedule(String password, String contents, String writer);
+
+    // 단건 조회
+    ScheduleResponseDto findScheduleByIdOrElseThrow(Long id);
+
+    // 조건별 일정 전체 조회
+    List<ScheduleResponseDto> findAllScheduleByCond(LocalDate date, String writer);
+
+    // 일정 수정
+    ScheduleResponseDto updateSchedule(Long id, String password, String contents, String writer);
+
+    // 일정 삭제
+    void deleteSchedule(Long id, String password);
 }
