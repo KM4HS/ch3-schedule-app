@@ -1,5 +1,7 @@
 package com.example.schedulemanagementapp.dto;
 
+import lombok.Getter;
+
 /**
  * <ul>
  * <li>packageName    : com.example.schedulemanagementapp.dto
@@ -12,5 +14,12 @@ package com.example.schedulemanagementapp.dto;
  * <p>
  * 24. 11. 5.        daca0       최초 생성
  * </p>
- */public class ScheduleRequestDto {
+ */
+
+@Getter
+public class ScheduleRequestDto {
+    private String password;
+    private String title;
+    private String contents;
+    private String writer;
 }
