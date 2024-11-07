@@ -21,7 +21,10 @@ import java.util.List;
  */
 public interface ScheduleRepository {
     // 일정 생성
-    ScheduleResponseDto createSchedule(Schedule schedule);
+    ScheduleResponseDto createSchedule(Schedule schedule, Long userId);
+
+    // 유저 이름 검색
+    String findNameByUserIdOrElseThrow(Long id);
 
     // 일정 단건 조회, 없을시 throw
     Schedule findScheduleByIdOrElseThrow(Long id);

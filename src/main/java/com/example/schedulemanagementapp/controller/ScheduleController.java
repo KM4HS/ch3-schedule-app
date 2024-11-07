@@ -45,7 +45,7 @@ public class ScheduleController {
             @RequestBody ScheduleRequestDto dto
     ) {
 
-        return new ResponseEntity<>(scheduleService.createSchedule(dto.getPassword(), dto.getContents(), dto.getUser()), HttpStatus.CREATED);
+        return new ResponseEntity<>(scheduleService.createSchedule(dto.getPassword(), dto.getContents(), dto.getUserId()), HttpStatus.CREATED);
     }
 
     /**
@@ -91,7 +91,7 @@ public class ScheduleController {
             @RequestBody ScheduleRequestDto dto
     ) {
 
-        return new ResponseEntity<>(scheduleService.updateSchedule(id, dto.getPassword(), dto.getContents(), dto.getUser()), HttpStatus.OK);
+        return new ResponseEntity<>(scheduleService.updateSchedule(id, dto.getPassword(), dto.getContents(), dto.getUserName()), HttpStatus.OK);
     }
 
     /**

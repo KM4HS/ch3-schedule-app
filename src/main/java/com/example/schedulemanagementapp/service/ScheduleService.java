@@ -21,7 +21,7 @@ import java.util.List;
 public interface ScheduleService {
 
     // 일정 생성
-    ScheduleResponseDto createSchedule(String password, String contents, String user);
+    ScheduleResponseDto createSchedule(String password, String contents, Long userId);
 
     // 단건 조회
     ScheduleResponseDto findScheduleByIdOrElseThrow(Long id);

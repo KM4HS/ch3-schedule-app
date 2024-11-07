@@ -21,5 +21,6 @@ public class ScheduleRequestDto {
     private String password;
     private String title;
     private String contents;
-    private String user;
+    private Long userId;
+    private String userName;
 }

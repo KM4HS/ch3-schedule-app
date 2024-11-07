@@ -45,10 +45,14 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
      * 일정을 db에 기록. Auto_increment로 생성된 key값, 현재 시간과 매개변수로 받은 데이터를 schedule 엔티티에 저장.
      *
      * @param schedule
+     * @param userId
      * @return 생성한 일정을 담은 응답 dto
      */
     @Override
-    public ScheduleResponseDto createSchedule(Schedule schedule) {
+    public ScheduleResponseDto createSchedule(Schedule schedule, Long userId) {
+
+        String userName = findNameByUserIdOrElseThrow(userId);
+        System.out.println(userName);
 
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName("schedule").usingGeneratedKeyColumns("id");
@@ -58,12 +62,27 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("password", schedule.getPassword());
         parameters.put("contents", schedule.getContents());
-        parameters.put("user", schedule.getUser());
+        parameters.put("fk_userid", userId);
         parameters.put("mod_date", modDate);
 
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
 
-        return new ScheduleResponseDto(key.longValue(), modDate, schedule.getContents(), schedule.getUser());
+        return new ScheduleResponseDto(key.longValue(), modDate, schedule.getContents(), userName);
+    }
+
+    /**
+     * schedule 테이블의 외래키를 이용해 user 테이블에서 이름을 찾아온다.
+     * @param id schedule 테이블 외래키(->user)
+     * @return 찾은 이름. 없을시 404
+     */
+    @Override
+    public String findNameByUserIdOrElseThrow(Long id) {
+        List<String> result = jdbcTemplate.query("SELECT name FROM user WHERE id = ?", rowMapperToString(), id);
+        return result.stream()
+                .findAny()
+                .orElseThrow(()->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND)
+                );
     }
 
     /**
@@ -93,7 +112,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     public List<ScheduleResponseDto> findAllScheduleByCond(LocalDate date, String user) {
 
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT * FROM schedule");
+        sql.append("SELECT s.*, u.name FROM schedule s JOIN user u ON s.fk_userid=u.id");
 
         // 조건이 있을 시 WHERE 절 추가
         if (date != null || user != null) {
@@ -103,7 +122,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         // date 조건이 있는 경우
         boolean andFlag = false;
         if (date != null) {
-            sql.append(" mod_date = ").append("'").append(date).append("'");
+            sql.append(" s.mod_date = ").append("'").append(date).append("'");
             andFlag = true;
         }
 
@@ -113,7 +132,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
             if (andFlag) {
                 sql.append(" AND");
             }
-            sql.append(" user = ").append("\"").append(user).append("\"");
+            sql.append(" u.name = ").append("\"").append(user).append("\"");
         }
         // 수정일 기준으로 내림차순 정렬
         sql.append(" ORDER BY mod_date DESC");
@@ -161,7 +180,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
                         rs.getLong("id"),
                         rs.getDate("mod_date").toLocalDate(),
                         rs.getString("contents"),
-                        rs.getString("user")
+                        findNameByUserIdOrElseThrow(rs.getLong("fk_userid"))
                 );
             }
         };
@@ -181,8 +200,17 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
                         rs.getString("password"),
                         rs.getDate("mod_date").toLocalDate(),
                         rs.getString("contents"),
-                        rs.getString("user")
+                        rs.getLong("fk_userid")
                 );
+            }
+        };
+    }
+
+    private RowMapper<String> rowMapperToString() {
+        return new RowMapper<String>() {
+            @Override
+            public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getString("name");
             }
         };
     }

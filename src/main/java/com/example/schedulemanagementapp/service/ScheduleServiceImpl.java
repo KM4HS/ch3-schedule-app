@@ -39,15 +39,15 @@ public class ScheduleServiceImpl implements ScheduleService {
      *
      * @param password 비밀번호
      * @param contents 일정 내용
-     * @param user   작성자
+     * @param userId   작성자id
      * @return repository를 거쳐 완성된 schedule을 dto로 반환
      */
     @Override
-    public ScheduleResponseDto createSchedule(String password, String contents, String user) {
+    public ScheduleResponseDto createSchedule(String password, String contents, Long userId) {
 
-        Schedule schedule = new Schedule(password, contents, user);
+        Schedule schedule = new Schedule(password, contents, userId);
 
-        return scheduleRepository.createSchedule(schedule);
+        return scheduleRepository.createSchedule(schedule, userId);
     }
 
     /**
@@ -59,7 +59,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public ScheduleResponseDto findScheduleByIdOrElseThrow(Long id) {
 
-        return new ScheduleResponseDto(scheduleRepository.findScheduleByIdOrElseThrow(id));
+        return new ScheduleResponseDto(scheduleRepository.findScheduleByIdOrElseThrow(id), scheduleRepository.findNameByUserIdOrElseThrow(id));
     }
 
     /**
@@ -102,7 +102,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
         }
 
-        return new ScheduleResponseDto(scheduleRepository.findScheduleByIdOrElseThrow(id));
+        return new ScheduleResponseDto(scheduleRepository.findScheduleByIdOrElseThrow(id), scheduleRepository.findNameByUserIdOrElseThrow(id));
     }
 
     /**
