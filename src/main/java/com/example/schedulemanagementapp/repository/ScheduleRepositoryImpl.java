@@ -3,6 +3,8 @@ package com.example.schedulemanagementapp.repository;
 import com.example.schedulemanagementapp.Paging;
 import com.example.schedulemanagementapp.dto.ScheduleResponseDto;
 import com.example.schedulemanagementapp.entity.Schedule;
+import com.example.schedulemanagementapp.exceptions.CustomException;
+import com.example.schedulemanagementapp.exceptions.ExceptionCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -55,7 +57,6 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         // 유저의 이름을 찾는다.
         // 만약 등록되지 않은 유저 id일 경우 throw
         String userName = findNameByUserIdOrElseThrow(userId);
-        System.out.println(userName);
 
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName("schedule").usingGeneratedKeyColumns("id");
@@ -100,8 +101,14 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         List<Schedule> result = jdbcTemplate.query("SELECT * FROM schedule WHERE id = ?", rowMapperToSchedule(), id);
         return result.stream()
                 .findAny()
-                .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id)
+                .orElseThrow(() -> {
+                            Long max = findMaxId();
+                            if (id < max) {
+                                return new CustomException(ExceptionCode.DELETED_RESOURCE);
+                            } else {
+                                return new CustomException(ExceptionCode.INVALID_REQUEST);
+                            }
+                        }
                 );
     }
 
@@ -140,8 +147,6 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         }
         // 수정일 기준으로 내림차순 정렬
         sql.append(" ORDER BY mod_date DESC");
-
-        System.out.println(sql);
 
         return jdbcTemplate.query(sql.toString(), rowMapperToDto());
     }
@@ -233,5 +238,16 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
                 return rs.getString("name");
             }
         };
+    }
+
+    /**
+     * 삭제 아이디 확인을 위해 가장 큰 아이디값을 구함
+     * @return schedule 테이블에서 가장 큰 아이디
+     */
+    private Long findMaxId() {
+        List<Long> result = jdbcTemplate.query("SELECT id FROM schedule ORDER BY id DESC LIMIT 1", (rs, rowNum) -> rs.getLong("id"));
+        return result.stream()
+                .findAny()
+                .orElseThrow();
     }
 }

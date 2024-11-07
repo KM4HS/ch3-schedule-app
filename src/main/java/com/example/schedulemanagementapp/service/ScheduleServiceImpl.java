@@ -3,11 +3,11 @@ package com.example.schedulemanagementapp.service;
 import com.example.schedulemanagementapp.Paging;
 import com.example.schedulemanagementapp.dto.ScheduleResponseDto;
 import com.example.schedulemanagementapp.entity.Schedule;
+import com.example.schedulemanagementapp.exceptions.CustomException;
+import com.example.schedulemanagementapp.exceptions.ExceptionCode;
 import com.example.schedulemanagementapp.repository.ScheduleRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -103,17 +103,17 @@ public class ScheduleServiceImpl implements ScheduleService {
     public ScheduleResponseDto updateSchedule(Long id, String password, String contents) {
 
         if (contents == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Contents is required");
+            throw new CustomException(ExceptionCode.INVALID_REQUEST);
         }
 
         Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
 
         if (!schedule.getPassword().equals(password)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong password");
+            throw new CustomException(ExceptionCode.PASSWORD_NOT_MATCH);
         }
 
         if (scheduleRepository.updateSchedule(id, contents) == 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
+            throw new CustomException(ExceptionCode.INVALID_REQUEST);
         }
 
         return new ScheduleResponseDto(scheduleRepository.findScheduleByIdOrElseThrow(id), scheduleRepository.findNameByUserIdOrElseThrow(id));
@@ -130,7 +130,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
 
         if (!schedule.getPassword().equals(password)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong password");
+            throw new CustomException(ExceptionCode.PASSWORD_NOT_MATCH);
         }
 
         scheduleRepository.deleteSchedule(id);
