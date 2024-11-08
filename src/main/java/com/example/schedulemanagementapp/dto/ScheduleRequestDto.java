@@ -1,5 +1,8 @@
 package com.example.schedulemanagementapp.dto;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 /**
@@ -18,9 +21,13 @@ import lombok.Getter;
 
 @Getter
 public class ScheduleRequestDto {
+
+    @NotEmpty
     private String password;
-    private String title;
+
+    @Size(min = 1, max = 200)
     private String contents;
+
+    @NotNull
     private Long userId;
-    private String userName;
 }

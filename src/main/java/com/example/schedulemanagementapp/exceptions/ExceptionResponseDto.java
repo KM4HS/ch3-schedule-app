@@ -2,7 +2,6 @@ package com.example.schedulemanagementapp.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.http.ResponseEntity;
 
 /**
  * <ul>
@@ -10,7 +9,7 @@ import org.springframework.http.ResponseEntity;
  * <li>fileName       : ExceptionResponseDto
  * <li>author         : daca0
  * <li>date           : 24. 11. 8.
- * <li>description    :
+ * <li>description    : 예외 응답을 위한 dto
  * </ul>
  * ===========================================================
  * <p>

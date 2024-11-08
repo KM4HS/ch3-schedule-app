@@ -9,7 +9,7 @@ import lombok.Getter;
  * <li>fileName       : CustomException
  * <li>author         : daca0
  * <li>date           : 24. 11. 8.
- * <li>description    :
+ * <li>description    : 커스텀 예외
  * </ul>
  * ===========================================================
  * <p>
@@ -18,6 +18,6 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public class CustomException extends RuntimeException{
+public class CustomException extends RuntimeException {
     final ExceptionCode exceptionCode;
 }

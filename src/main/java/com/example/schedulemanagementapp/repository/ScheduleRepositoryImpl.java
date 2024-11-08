@@ -243,6 +243,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 
     /**
      * 삭제 아이디 확인을 위해 가장 큰 아이디값을 구함
+     *
      * @return schedule 테이블에서 가장 큰 아이디
      */
     private Long findMaxId() {

@@ -4,6 +4,7 @@ import com.example.schedulemanagementapp.dto.MsgResponseDto;
 import com.example.schedulemanagementapp.dto.ScheduleRequestDto;
 import com.example.schedulemanagementapp.dto.ScheduleResponseDto;
 import com.example.schedulemanagementapp.service.ScheduleService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +44,7 @@ public class ScheduleController {
      */
     @PostMapping
     public ResponseEntity<ScheduleResponseDto> createSchedule(
-            @RequestBody ScheduleRequestDto dto
+            @Valid @RequestBody ScheduleRequestDto dto
     ) {
 
         return new ResponseEntity<>(scheduleService.createSchedule(dto.getPassword(), dto.getContents(), dto.getUserId()), HttpStatus.CREATED);
@@ -92,7 +93,7 @@ public class ScheduleController {
             @RequestParam int pageSize
     ) {
 
-        return new ResponseEntity<>(new MsgResponseDto("페이지 번호 "+pageIndex, scheduleService.findAllSchedulesInPage(pageIndex, pageSize)), HttpStatus.OK);
+        return new ResponseEntity<>(new MsgResponseDto("페이지 번호 " + pageIndex, scheduleService.findAllSchedulesInPage(pageIndex, pageSize)), HttpStatus.OK);
     }
 
     /**
@@ -105,7 +106,7 @@ public class ScheduleController {
     @PatchMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> updateSchedule(
             @PathVariable Long id,
-            @RequestBody ScheduleRequestDto dto
+            @Valid @RequestBody ScheduleRequestDto dto
     ) {
 
         return new ResponseEntity<>(scheduleService.updateSchedule(id, dto.getPassword(), dto.getContents()), HttpStatus.OK);

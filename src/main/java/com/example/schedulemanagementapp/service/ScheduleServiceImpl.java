@@ -78,8 +78,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     /**
      * 입력받은 값으로 페이징 객체 생성하고 repository 호출
+     *
      * @param pageIndex 페이지 번호
-     * @param pageSize 페이지 크기
+     * @param pageSize  페이지 크기
      * @return 페이징 단위의 일정 리스트
      */
     @Override
@@ -102,9 +103,10 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public ScheduleResponseDto updateSchedule(Long id, String password, String contents) {
 
-        if (contents == null) {
+        // @Valid로 검증
+        /*if (contents == null) {
             throw new CustomException(ExceptionCode.INVALID_REQUEST);
-        }
+        }*/
 
         Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
 
