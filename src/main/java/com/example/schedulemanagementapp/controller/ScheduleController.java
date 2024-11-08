@@ -1,8 +1,8 @@
 package com.example.schedulemanagementapp.controller;
 
+import com.example.schedulemanagementapp.dto.MsgResponseDto;
 import com.example.schedulemanagementapp.dto.ScheduleRequestDto;
 import com.example.schedulemanagementapp.dto.ScheduleResponseDto;
-import com.example.schedulemanagementapp.exceptions.CustomException;
 import com.example.schedulemanagementapp.service.ScheduleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -87,12 +87,12 @@ public class ScheduleController {
      * @return 페이징 단위의 일정 리스트 반환
      */
     @GetMapping("/pages")
-    public ResponseEntity<List<ScheduleResponseDto>> findAllSchedulesInPage(
+    public ResponseEntity<MsgResponseDto> findAllSchedulesInPage(
             @RequestParam int pageIndex,
             @RequestParam int pageSize
     ) {
 
-        return new ResponseEntity<>(scheduleService.findAllSchedulesInPage(pageIndex, pageSize), HttpStatus.OK);
+        return new ResponseEntity<>(new MsgResponseDto("페이지 번호 "+pageIndex, scheduleService.findAllSchedulesInPage(pageIndex, pageSize)), HttpStatus.OK);
     }
 
     /**
@@ -119,12 +119,12 @@ public class ScheduleController {
      * @return 삭제되었다는 메시지 반환
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteScheduleById(
+    public ResponseEntity<MsgResponseDto> deleteScheduleById(
             @PathVariable Long id,
             @RequestBody ScheduleRequestDto dto
     ) {
 
         scheduleService.deleteSchedule(id, dto.getPassword());
-        return new ResponseEntity<>("complete", HttpStatus.OK);
+        return new ResponseEntity<>(new MsgResponseDto("삭제 완료"), HttpStatus.OK);
     }
 }

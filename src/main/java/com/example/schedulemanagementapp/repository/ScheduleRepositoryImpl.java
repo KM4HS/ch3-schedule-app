@@ -71,7 +71,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
 
-        return new ScheduleResponseDto(key.longValue(), modDate, schedule.getContents(), userName);
+        return new ScheduleResponseDto(key.longValue(), modDate, schedule.getContents(), userId, userName);
     }
 
     /**
@@ -200,6 +200,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
                         rs.getLong("id"),
                         rs.getDate("mod_date").toLocalDate(),
                         rs.getString("contents"),
+                        rs.getLong("fk_userid"),
                         findNameByUserIdOrElseThrow(rs.getLong("fk_userid"))
                 );
             }
