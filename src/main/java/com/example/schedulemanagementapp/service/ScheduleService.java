@@ -37,4 +37,8 @@ public interface ScheduleService {
 
     // 일정 삭제
     void deleteSchedule(Long id, String password);
+
+
+    // 일정에서 작성자명 수정
+    ScheduleResponseDto updateScheduleName(Long id, String password, String name);
 }

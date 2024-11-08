@@ -42,4 +42,8 @@ public interface ScheduleRepository {
     // 일정 삭제
     void deleteSchedule(Long id);
 
+
+    // 일정에서 작성자명 수정
+    int updateScheduleName(Long id, String name);
+
 }

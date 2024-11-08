@@ -60,7 +60,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public ScheduleResponseDto findScheduleByIdOrElseThrow(Long id) {
 
-        return new ScheduleResponseDto(scheduleRepository.findScheduleByIdOrElseThrow(id), scheduleRepository.findNameByUserIdOrElseThrow(id));
+        Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
+
+        return new ScheduleResponseDto(schedule, scheduleRepository.findNameByUserIdOrElseThrow(schedule.getUserId()));
     }
 
     /**
@@ -118,7 +120,9 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new CustomException(ExceptionCode.INVALID_REQUEST);
         }
 
-        return new ScheduleResponseDto(scheduleRepository.findScheduleByIdOrElseThrow(id), scheduleRepository.findNameByUserIdOrElseThrow(id));
+        schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
+
+        return new ScheduleResponseDto(schedule, scheduleRepository.findNameByUserIdOrElseThrow(schedule.getUserId()));
     }
 
     /**
@@ -136,5 +140,23 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
 
         scheduleRepository.deleteSchedule(id);
+    }
+
+    @Override
+    public ScheduleResponseDto updateScheduleName(Long id, String password, String name) {
+
+        Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
+
+        if (!schedule.getPassword().equals(password)) {
+            throw new CustomException(ExceptionCode.PASSWORD_NOT_MATCH);
+        }
+
+        if(scheduleRepository.updateScheduleName(id, name) == 0) {
+            throw new CustomException(ExceptionCode.INVALID_REQUEST);
+        }
+
+        schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
+
+        return new ScheduleResponseDto(schedule, scheduleRepository.findNameByUserIdOrElseThrow(schedule.getUserId()));
     }
 }

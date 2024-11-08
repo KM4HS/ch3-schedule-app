@@ -187,6 +187,15 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         jdbcTemplate.update("DELETE FROM schedule WHERE id = ?", id);
     }
 
+    @Override
+    public int updateScheduleName(Long id, String name) {
+
+        Long userId = findScheduleByIdOrElseThrow(id).getUserId();
+
+        LocalDate modDate = LocalDate.now();
+        return jdbcTemplate.update("UPDATE user SET name = ?, mod_date = ? WHERE id = ?", name, modDate, userId);
+    }
+
     /**
      * db의 값을 응답 dto로 매핑
      *

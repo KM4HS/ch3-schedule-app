@@ -112,6 +112,15 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleService.updateSchedule(id, dto.getPassword(), dto.getContents()), HttpStatus.OK);
     }
 
+    @PatchMapping("/test/{id}")
+    public ResponseEntity<ScheduleResponseDto> updateScheduleName(
+        @PathVariable Long id,
+        @Valid @RequestBody ScheduleRequestDto dto
+    ) {
+
+        return new ResponseEntity<>(scheduleService.updateScheduleName(id, dto.getPassword(), dto.getName()), HttpStatus.OK);
+    }
+
     /**
      * 일정 삭제
      *

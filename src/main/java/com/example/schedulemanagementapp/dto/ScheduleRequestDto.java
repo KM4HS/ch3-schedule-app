@@ -28,6 +28,7 @@ public class ScheduleRequestDto {
     @Size(min = 1, max = 200)
     private String contents;
 
-    @NotNull
     private Long userId;
+
+    private String name;
 }
