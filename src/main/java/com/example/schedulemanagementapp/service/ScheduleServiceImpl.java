@@ -6,6 +6,8 @@ import com.example.schedulemanagementapp.entity.Schedule;
 import com.example.schedulemanagementapp.exceptions.CustomException;
 import com.example.schedulemanagementapp.exceptions.ExceptionCode;
 import com.example.schedulemanagementapp.repository.ScheduleRepository;
+import com.example.schedulemanagementapp.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,13 +29,16 @@ import java.util.List;
  */
 
 @Service
+@RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+    private final UserRepository userRepository;
 
-    public ScheduleServiceImpl(ScheduleRepository scheduleRepository) {
+    // @RequiredArgsConstructor 로 대체 가능
+    /*public ScheduleServiceImpl(ScheduleRepository scheduleRepository) {
         this.scheduleRepository = scheduleRepository;
-    }
+    }*/
 
     /**
      * 일정 생성 서비스 단계. 요청값을 schedule에 대입
@@ -46,9 +51,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public ScheduleResponseDto createSchedule(String password, String contents, Long userId) {
 
+        String userName = userRepository.findNameByUserIdOrElseThrow(userId);
         Schedule schedule = new Schedule(password, contents, userId);
-
-        return scheduleRepository.createSchedule(schedule, userId);
+        return new ScheduleResponseDto(scheduleRepository.createSchedule(schedule, userId), userName) ;
     }
 
     /**
@@ -62,7 +67,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
 
-        return new ScheduleResponseDto(schedule, scheduleRepository.findNameByUserIdOrElseThrow(schedule.getUserId()));
+        return new ScheduleResponseDto(schedule, userRepository.findNameByUserIdOrElseThrow(schedule.getUserId()));
     }
 
     /**
@@ -75,7 +80,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public List<ScheduleResponseDto> findAllScheduleByCond(LocalDate date, String user) {
 
-        return scheduleRepository.findAllScheduleByCond(date, user);
+        List<Schedule> schedules = scheduleRepository.findAllScheduleByCond(date, user);
+
+        return schedules.stream().map(a -> new ScheduleResponseDto(a, userRepository.findNameByUserIdOrElseThrow(a.getUserId()))).toList();
     }
 
     /**
@@ -89,8 +96,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     public List<ScheduleResponseDto> findAllSchedulesInPage(int pageIndex, int pageSize) {
 
         Paging paging = new Paging(pageIndex, pageSize);
+        List<Schedule> schedules = scheduleRepository.findAllSchedulesInPage(paging);
 
-        return scheduleRepository.findAllSchedulesInPage(paging);
+        return schedules.stream().map(a -> new ScheduleResponseDto(a, userRepository.findNameByUserIdOrElseThrow(a.getUserId()))).toList();
     }
 
     /**
@@ -122,7 +130,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
 
-        return new ScheduleResponseDto(schedule, scheduleRepository.findNameByUserIdOrElseThrow(schedule.getUserId()));
+        return new ScheduleResponseDto(schedule, userRepository.findNameByUserIdOrElseThrow(schedule.getUserId()));
     }
 
     /**
@@ -157,6 +165,6 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
 
-        return new ScheduleResponseDto(schedule, scheduleRepository.findNameByUserIdOrElseThrow(schedule.getUserId()));
+        return new ScheduleResponseDto(schedule, userRepository.findNameByUserIdOrElseThrow(schedule.getUserId()));
     }
 }

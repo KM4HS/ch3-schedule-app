@@ -2,7 +2,10 @@ package com.example.schedulemanagementapp.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.jdbc.core.RowMapper;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 /**
@@ -31,5 +34,14 @@ public class User {
     public User(String email, String name) {
         this.email = email;
         this.name = name;
+    }
+
+    public static RowMapper<String> rowMapperToUserName() {
+        return new RowMapper<String>() {
+            @Override
+            public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getString("name");
+            }
+        };
     }
 }

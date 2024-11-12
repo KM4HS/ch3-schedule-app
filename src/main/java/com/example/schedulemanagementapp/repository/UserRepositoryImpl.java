@@ -73,12 +73,28 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User findUserByIdOrElseThrow(Long id) {
 
-        List<User> user = jdbcTemplate.query("SELECT * FROM user WHERE id = ?", rowMapperToUser(), id);
+        List<User> user = jdbcTemplate.query("SELECT * FROM `user` WHERE id = ?", rowMapperToUser(), id);
 
         return user.stream()
                 .findAny()
                 .orElseThrow(() ->
                         new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id)
+                );
+    }
+
+    /**
+     * schedule 테이블의 외래키를 이용해 user 테이블에서 이름을 찾아온다.
+     *
+     * @param id schedule 테이블 외래키(->user)
+     * @return 찾은 이름. 없을시 404
+     */
+    @Override
+    public String findNameByUserIdOrElseThrow(Long id) {
+        List<String> result = jdbcTemplate.query("SELECT name FROM `user` WHERE id = ?", User.rowMapperToUserName(), id);
+        return result.stream()
+                .findAny()
+                .orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND)
                 );
     }
 

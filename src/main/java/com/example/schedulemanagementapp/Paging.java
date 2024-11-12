@@ -1,6 +1,7 @@
 package com.example.schedulemanagementapp;
 
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * <ul>
@@ -21,6 +22,9 @@ public class Paging {
     private final int pageIndex;
     private final int pageSize;
     private final int startRow;
+
+    @Setter
+    Long totalSize;
 
     public Paging(int pageIndex, int pageSize) {
         this.pageIndex = Math.max(pageIndex, 1);

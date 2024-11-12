@@ -22,19 +22,16 @@ import java.util.List;
  */
 public interface ScheduleRepository {
     // 일정 생성
-    ScheduleResponseDto createSchedule(Schedule schedule, Long userId);
-
-    // 유저 이름 검색
-    String findNameByUserIdOrElseThrow(Long id);
+    Schedule createSchedule(Schedule schedule, Long userId);
 
     // 일정 단건 조회, 없을시 throw
     Schedule findScheduleByIdOrElseThrow(Long id);
 
     // 조건별 일정 전체 조회
-    List<ScheduleResponseDto> findAllScheduleByCond(LocalDate date, String user);
+    List<Schedule> findAllScheduleByCond(LocalDate date, String user);
 
     // 페이징
-    List<ScheduleResponseDto> findAllSchedulesInPage(Paging paging);
+    List<Schedule> findAllSchedulesInPage(Paging paging);
 
     // 일정 수정
     int updateSchedule(Long id, String contents);

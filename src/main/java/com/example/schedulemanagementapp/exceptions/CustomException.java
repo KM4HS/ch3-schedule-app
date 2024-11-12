@@ -2,6 +2,7 @@ package com.example.schedulemanagementapp.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
  * <ul>
@@ -17,7 +18,7 @@ import lombok.Getter;
  * </p>
  */
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CustomException extends RuntimeException {
     final ExceptionCode exceptionCode;
 }

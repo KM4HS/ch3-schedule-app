@@ -24,6 +24,8 @@ public interface UserRepository {
     // 유저 단일 조회
     User findUserByIdOrElseThrow(Long id);
 
+    String findNameByUserIdOrElseThrow(Long id);
+
     // 유저 정보 수정
     int updateUser(Long id, String name);
 }

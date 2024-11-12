@@ -64,11 +64,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto updateUser(Long id, String name) {
 
-        // 이름이 null인 경우 400
-        if (name == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name is required");
-        }
-
         // 수정된 user가 없을 경우 404
         if (userRepository.updateUser(id, name) == 0) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);

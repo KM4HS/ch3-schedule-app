@@ -1,8 +1,8 @@
 package com.example.schedulemanagementapp.dto;
 
 import com.example.schedulemanagementapp.entity.User;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 
@@ -21,13 +21,13 @@ import java.time.LocalDate;
  */
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserResponseDto {
-    private Long id;
-    private LocalDate regDate;
-    private LocalDate modDate;
-    private String email;
-    private String name;
+    private final Long id;
+    private final LocalDate regDate;
+    private final LocalDate modDate;
+    private final String email;
+    private final String name;
 
     public UserResponseDto(User user) {
         this.id = user.getId();

@@ -2,6 +2,7 @@ package com.example.schedulemanagementapp.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
  * <ul>
@@ -18,9 +19,9 @@ import lombok.Getter;
  */
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ExceptionResponseDto {
-    private String code;
-    private int status;
-    private String msg;
+    private final String code;
+    private final int status;
+    private final String msg;
 }
